@@ -7,6 +7,8 @@
 
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,8 +24,8 @@ body{background:linear-gradient(135deg,#87ceeb  0%,#87ceeb 100%);font-family:'Se
 .container{max-width:1130px;margin:0 auto;background:rgb(138,201,241);border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.2);overflow:hidden;}
 .header{background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:white;border-bottom:4px solid #FFD700;padding:14px 30px;text-align:center;position:relative;}
 .header h1{font-size:1.7em;font-weight:bold;text-transform:uppercase;letter-spacing:2px;text-shadow:2px 2px 4px rgba(0,0,0,0.3);margin-bottom:2px;}
-.header h2{font-size:1em;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:white;}
-.header h3{font-size:1.em;font-weight:bold;text-transform:uppercase;letter-spacing:1.5px;color:#FFD700;margin-top:2px;}
+.header h2{font-size:1em;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#FFD700;}
+.header h3{font-size:1.em;font-weight:bold;text-transform:uppercase;letter-spacing:1.5px;color:white;margin-top:2px;}
 .header-sub{font-size:1.em;color:#cdd8f8;margin-top:3px;font-weight:600;}
 .form-container{padding:14px;background:#e4e7e7;}
 .info-section{background:rgb(212,220,218);padding:10px 14px;margin-bottom:10px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.1);}
@@ -53,12 +55,12 @@ input[type="text"],textarea{text-transform:uppercase;}
 .dual-ans label{font-size:10px;font-weight:bold;color:#555;margin-bottom:0;}
 /* Signature section */
 .sig-row{display:flex;gap:14px;margin-top:10px;justify-content:flex-start;align-items:flex-start;}
-.sig-box{flex:0 0 48%;max-width:420px;background:white;border:2px solid #b3d9ff;border-radius:8px;padding:10px 14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-#cliOtherName{display:none;margin-top:5px;width:100%;padding:4px 6px;border:2px solid #f0a500;border-radius:5px;font-size:11px;font-weight:bold;background:#fffbe6;text-transform:uppercase;}
-.sig-box h4{color:#1a237e;font-size:12px;font-weight:bold;text-transform:uppercase;margin-bottom:6px;border-bottom:2px solid #4a90e2;padding-bottom:4px;}
-.sig-box label{display:block;font-weight:bold;font-size:11px;color:#1a237e;margin-bottom:3px;text-align:left;}
-.sig-box select,.sig-box input[type="file"]{width:100%;padding:4px 6px;border:2px solid #b3d9ff;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:6px;}
-.sig-box input[type="date"]{width:100%;padding:4px 6px;border:2px solid #b3d9ff;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:6px;}
+.sig-box{flex:1 1 100%;width:100%;max-width:100%;background:white;border:2px solid #b3d9ff;border-radius:8px;padding:16px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+#cliOtherName{display:none;margin-top:5px;width:100%;padding:7px 10px;border:2px solid #f0a500;border-radius:5px;font-size:14px;font-weight:bold;background:#fffbe6;text-transform:uppercase;}
+.sig-box h4{color:#1a237e;font-size:14px;font-weight:bold;text-transform:uppercase;margin-bottom:8px;border-bottom:2px solid #4a90e2;padding-bottom:6px;}
+.sig-box label{display:block;font-weight:bold;font-size:13px;color:#1a237e;margin-bottom:4px;text-align:left;}
+.sig-box select,.sig-box input[type="file"]{width:100%;padding:8px 10px;border:2px solid #b3d9ff;border-radius:5px;font-size:14px;font-weight:bold;margin-bottom:8px;}
+.sig-box input[type="date"]{width:100%;padding:8px 10px;border:2px solid #b3d9ff;border-radius:5px;font-size:14px;font-weight:bold;margin-bottom:8px;}
 .sig-preview{margin-top:6px;display:none;text-align:center;}
 .sig-preview img{max-width:180px;max-height:70px;border:2px solid #4a90e2;border-radius:5px;}
 /* Button group */
@@ -118,9 +120,27 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
       </div>
     </div>
 
+    <!-- ═══ INSPECTING OFFICER DETAILS ═══ -->
+    <div class="info-section" style="background:rgb(225,235,250);border:2px solid #4a90e2;">
+      <div class="info-fields">
+        <div class="info-field">
+          <label for="inspOfficerName">Name of Inspecting Officer:</label>
+          <input type="text" id="inspOfficerName" placeholder="Enter name of inspecting officer">
+        </div>
+        <div class="info-field">
+          <label for="inspOfficerDesig">Designation:</label>
+          <input type="text" id="inspOfficerDesig" placeholder="Enter designation">
+        </div>
+        <div class="info-field">
+          <label for="inspOfficerDate">Date of Inspection:</label>
+          <input type="date" id="inspOfficerDate">
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ LOBBY PARTICULARS ═══ -->
     <div class="info-section">
-      <h2><span class="section-badge"></span>Crew Booking Office / Lobby Particulars</h2>
+      <h2>A. Crew Booking Office / Lobby Particulars</h2>
       <div class="info-fields">
         <div class="info-field">
           <label for="dateOfInsp">Date of Inspection:</label>
@@ -153,7 +173,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
 
     <!-- ═══ SECTION 1: SN ITEMS ═══ -->
     <div class="info-section">
-      <h2><span class="section-badge"></span>LOBBY WORKING</h2>
+      <h2>B. LOBBY WORKING</h2>
       <div style="overflow-x:auto;">
       <table class="checklist-table">
         <thead>
@@ -435,7 +455,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
 
     <!-- ═══ GENERAL CHECKS ═══ -->
     <div class="info-section">
-      <h2><span class="section-badge"></span>General Checks</h2>
+      <h2>C.  General Checks</h2>
       <div style="overflow-x:auto;">
       <table class="checklist-table">
         <thead>
@@ -514,7 +534,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
 
     <!-- ═══ CMS & CREW RELATED ═══ -->
     <div class="info-section">
-      <h2><span class="section-badge"></span>CCC OFFICE</h2>
+      <h2>D. CCC OFFICE</h2>
       <div style="overflow-x:auto;">
       <table class="checklist-table">
         <thead>
@@ -591,7 +611,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
 
     <!-- ═══ STAFF GRIEVANCE SYSTEM ═══ -->
     <div class="info-section">
-      <h2><span class="section-badge"></span>Staff Grievance System</h2>
+      <h2>E.  Staff Grievance System</h2>
       <div style="overflow-x:auto;">
       <table class="checklist-table">
         <thead>
@@ -634,7 +654,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
   
       <div class="info-fields">
         <div class="info-field full-width">
-          <label for="otherDeficiency">Any other deficiency noticed / suggestion to improve the condition of Crew/Guard Lobby:</label>
+          <label for="otherDeficiency" style="font-size:15px;color:#1a237e;font-weight:bold;">F.  Any other deficiency noticed / suggestion to improve the condition of Crew/Guard Lobby:</label>
           <textarea id="otherDeficiency" rows="3" placeholder=""></textarea>
         </div>
       </div>
@@ -656,7 +676,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
         <!-- LEFT SIGNATURE -->
         <div class="sig-box">
           <label for="cliName1">CLI Name and HQ:</label>
-          <select id="cliName1" onchange="handleCliOther(this)">
+          <select id="cliName1" onchange="handleCliOther(this)" style="font-size:15px;padding:10px 12px;height:48px;font-weight:bold;color:#1a237e;border:2px solid #4a90e2;">
             <option value="">Select CLI Name and HQ</option>
             <option value="A K REDDY/CLI/BIA">A K REDDY/CLI/BIA</option>
             <option value="A.R.TARAM/CLI/BIA">A.R. TARAM/CLI/BIA</option>
@@ -807,7 +827,7 @@ function handleCliOther(sel) {
 function resetPDF() {
   pdfGenerated = false;
   formSubmitted = false;
-  showMessage('⚠️ Form changed — please Submit again before generating PDF.', 'error');
+ 
 }
 
 // ── Track form changes to reset PDF ──────────────────────────────────
@@ -921,19 +941,21 @@ function generatePDF() {
 
   // ─── Navy Header ───────────────────────────────────────────────────
   doc.setFillColor(26,35,126);
-  doc.rect(0,0,PW,30,'F');
+  doc.rect(0,0,PW,38,'F');
   doc.setDrawColor(255,215,0);
   doc.setLineWidth(1.5);
-  doc.line(0,30,PW,30);
+  doc.line(0,38,PW,38);
 
   doc.setFontSize(10); doc.setFont(undefined,'bold'); doc.setTextColor(255,255,255);
-  doc.text('SFT-6', PW/2, 9, {align:'center'});
-  doc.setFontSize(20);
-  doc.text('CREW BOOKING / LOBBY INSPECTION REPORT', PW/2, 18, {align:'center'});
+  doc.text('SFT-6', PW/2, 8, {align:'center'});
+  doc.setFontSize(18);
+  doc.text('CREW BOOKING / LOBBY INSPECTION REPORT', PW/2, 17, {align:'center'});
   doc.setFontSize(12); doc.setFont(undefined,'bold'); doc.setTextColor(255,215,0);
-  doc.text('RAIPUR DIVISION ', PW/2, 26, {align:'center'});
+  doc.text('RAIPUR DIVISION', PW/2, 25, {align:'center'});
+  doc.setFontSize(7.5); doc.setFont(undefined,'normal'); doc.setTextColor(200,215,255);
+  doc.text('Detailed departmental inspection to be carried out as per checklist of respective department', PW/2, 33, {align:'center'});
 
-  y = 35;
+  y = 40;
 
   // ─── Helper functions ───────────────────────────────────────────────
   function checkPage(needed) {
@@ -1053,8 +1075,31 @@ function generatePDF() {
     y += 3;
   }
 
-  // ─── Section 1: Lobby Particulars ───────────────────────────────
-  sectionHeader('Crew Booking Office / Lobby Particulars');
+  // ─── Inspecting Officer Block ────────────────────────────────────
+  checkPage(26);
+  doc.setDrawColor(74,144,226); doc.setLineWidth(0.5);
+  doc.rect(ML, y, CW, 22, 'S');
+  y += 6;
+  // Row 1: Name of Inspecting Officer + Designation (wider label column)
+  const lblW = 58;
+  doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
+  doc.text('Name of Inspecting Officer:', ML+2, y);
+  doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
+  doc.text(String(getVal('inspOfficerName')||'—'), ML+2+lblW, y);
+  doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
+  doc.text('Designation:', PW/2+2, y);
+  doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
+  doc.text(String(getVal('inspOfficerDesig')||'—'), PW/2+2+28, y);
+  y += 7;
+  // Row 2: Date of Inspection
+  doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
+  doc.text('Date of Inspection:', ML+2, y);
+  doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
+  doc.text(String(getVal('inspOfficerDate')||'—'), ML+2+lblW, y);
+  y += 5;
+
+  // ─── Section 1: A. Lobby Particulars ────────────────────────────
+  sectionHeader('A. Crew Booking Office / Lobby Particulars');
   doc.setFillColor(230,240,255);
   doc.rect(ML, y, CW, 22, 'F');
   doc.setDrawColor(150,190,230); doc.setLineWidth(0.3);
@@ -1064,7 +1109,7 @@ function generatePDF() {
   fieldRow2('Crew Booking Supervisor', getVal('cbsName'), 'DI / Booking Clerk', getVal('diClerkName'));
   y += 3;
 
-  // ─── Section 2: Lobby Working Items ──────────────────────────────
+  // ─── Section 2: B. Lobby Working Items ───────────────────────────
   const lobbyRows = [
     {sn:'1', question:"Sign 'ON' & Sign 'OFF' through CMS or Chalak Dal App\nCrew: "+getVal('signOnCrew')+" | Guard: "+getVal('signOnGuard'), answer:"Crew: "+getVal('signOnCrew')+"\nGuard: "+getVal('signOnGuard'), obs:getVal('obs1')},
     {sn:'2', question:"Sign ON & Sign OFF registers properly maintained?\nCrew: "+getVal('regCrewMaintained')+" | Guard: "+getVal('regGuardMaintained'), answer:"Crew: "+getVal('regCrewMaintained')+"\nGuard: "+getVal('regGuardMaintained'), obs:getVal('obs2')},
@@ -1081,7 +1126,7 @@ function generatePDF() {
     {sn:'13', question:'Availability of LR due register', answer:getVal('lrDueReg'), obs:getVal('obs13')},
     {sn:'14', question:'Availability of speed gun', answer:getVal('speedGun'), obs:getVal('obs14')},
   ];
-  tableSection('Lobby Working', lobbyRows);
+  tableSection('B. Lobby Working', lobbyRows);
 
   // ─── Section 3: General Checks ───────────────────────────────────
   const generalRows = [
@@ -1091,7 +1136,7 @@ function generatePDF() {
     {sn:'4', question:'Last date of cleaning of water cooler & water purifier', answer:getVal('waterCoolerDate')||'—', obs:getVal('obsG4')},
     {sn:'5', question:'General cleanliness including toilets', answer:getVal('generalCleanliness'), obs:getVal('obsG5')},
   ];
-  tableSection('General Checks', generalRows);
+  tableSection('C. General Checks', generalRows);
 
   // ─── Section 4: CCC Office ────────────────────────────────────────
   const cccRows = [
@@ -1101,7 +1146,7 @@ function generatePDF() {
     {sn:'4', question:'Average PDD in last one month', answer:getVal('avgPDD'), obs:getVal('obsC4')},
     {sn:'5', question:'Average Periodical Rest (PR) of LP, ALP & Guard in last month', answer:getVal('avgPR'), obs:getVal('obsC5')},
   ];
-  tableSection('CCC Office', cccRows);
+  tableSection('D. CCC Office', cccRows);
 
   // ─── Section 5: Staff Grievance System ───────────────────────────
   const grievanceRows = [
@@ -1109,13 +1154,13 @@ function generatePDF() {
     {sn:'2', question:'Whether any pending staff grievance?', answer:getVal('pendingGrievance'), obs:getVal('obsS2')},
     {sn:'3', question:'Whether employees are aware of staff welfare initiatives and recreational facilities?', answer:getVal('welfareAware'), obs:getVal('obsS3')},
   ];
-  tableSection('Staff Grievance System', grievanceRows);
+  tableSection('E. Staff Grievance System', grievanceRows);
 
   // ─── Section 6: Other Deficiencies ───────────────────────────────
   const defText = getVal('otherDeficiency');
   if(defText) {
     checkPage(20);
-    sectionHeader('Other Deficiencies / Suggestions');
+    sectionHeader('F. Other Deficiencies / Suggestions');
     doc.setFillColor(255,248,225);
     const defLines = doc.splitTextToSize(defText, CW-6);
     const defH = defLines.length*5+6;
@@ -1126,7 +1171,7 @@ function generatePDF() {
     y += defH + 4;
   }
 
-  y += 4;
+  y += 3;
 
   // ─── DUAL SIGNATURE BLOCK ─────────────────────────────────────────
   const sigNeeded = 35;
@@ -1190,6 +1235,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('dateOfInsp').value = today;
   document.getElementById('inspDate').value = today;
+  document.getElementById('inspOfficerDate').value = today;
 });
 </script>
 </body>
