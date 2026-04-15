@@ -124,7 +124,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
     <div class="info-section" style="background:rgb(225,235,250);border:2px solid #4a90e2;">
       <div class="info-fields">
         <div class="info-field">
-          <label for="inspOfficerName">Name of Inspecting Officer:</label>
+          <label for="inspOfficerName">Name of Inspecting Official:</label>
           <input type="text" id="inspOfficerName" placeholder="Enter name of inspecting officer">
         </div>
         <div class="info-field">
@@ -1083,7 +1083,7 @@ function generatePDF() {
   // Row 1: Name of Inspecting Officer + Designation (wider label column)
   const lblW = 58;
   doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
-  doc.text('Name of Inspecting Officer:', ML+2, y);
+  doc.text('Name of Inspecting Official:', ML+2, y);
   doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
   doc.text(String(getVal('inspOfficerName')||'—'), ML+2+lblW, y);
   doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
