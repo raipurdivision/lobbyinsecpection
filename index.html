@@ -1,0 +1,1196 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SFT-6 Crew Booking / Lobby Inspection Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:linear-gradient(135deg,#87ceeb 0%,#87ceeb 100%);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;padding:20px;min-height:100vh;}
+body{background:linear-gradient(135deg,#87ceeb  0%,#87ceeb 100%);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;padding:20px;min-height:100vh;}
+.container{max-width:1130px;margin:0 auto;background:rgb(138,201,241);border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.2);overflow:hidden;}
+.header{background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:white;border-bottom:4px solid #FFD700;padding:14px 30px;text-align:center;position:relative;}
+.header h1{font-size:1.7em;font-weight:bold;text-transform:uppercase;letter-spacing:2px;text-shadow:2px 2px 4px rgba(0,0,0,0.3);margin-bottom:2px;}
+.header h2{font-size:1em;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:white;}
+.header h3{font-size:1.em;font-weight:bold;text-transform:uppercase;letter-spacing:1.5px;color:#FFD700;margin-top:2px;}
+.header-sub{font-size:1.em;color:#cdd8f8;margin-top:3px;font-weight:600;}
+.form-container{padding:14px;background:#e4e7e7;}
+.info-section{background:rgb(212,220,218);padding:10px 14px;margin-bottom:10px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.1);}
+.info-section h2{font-size:3;font-weight:bold;color:#1a237e;margin-bottom:8px;text-align:center;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #4a90e2;padding-bottom:4px;}
+.info-fields{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.info-field{flex:0 1 48%;}
+.info-field.full-width{flex:1 1 100%;}
+.info-field label{display:block;font-weight:bold;margin-bottom:2px;color:#1a237e;font-size:11px;}
+.info-field input,.info-field select,.info-field textarea{width:100%;padding:4px 7px;border:2px solid #b3d9ff;border-radius:5px;font-size:11.5px;font-weight:bold;transition:border-color 0.3s,box-shadow 0.3s;background:white;line-height:1.3;}
+.info-field input:focus,.info-field select:focus,.info-field textarea:focus{outline:none;border-color:#4a90e2;box-shadow:0 0 8px rgba(74,144,226,0.3);}
+input[type="text"],textarea{text-transform:uppercase;}
+/* Checklist rows */
+.checklist-table{width:100%;border-collapse:collapse;margin-bottom:6px;}
+.checklist-table th{background:linear-gradient(135deg,#1a237e,#283593);color:white;padding:6px 7px;font-size:11px;text-align:center;border:1px solid #3a7ca5;}
+.checklist-table td{padding:5px 6px;border:1px solid #b3d9ff;font-size:11px;vertical-align:middle;background:#f0f8ff;line-height:1.3;}
+.checklist-table tr:nth-child(even) td{background:#ffffff;}
+.checklist-table tr:hover td{background:#d4e9ff;}
+.checklist-table td:first-child{font-weight:bold;color:#1a237e;text-align:center;width:38px;}
+.checklist-table td.q-cell{font-weight:600;color:#2c3e50;}
+.checklist-table td.ans-cell{width:160px;text-align:center;}
+.checklist-table td.obs-cell{width:220px;}
+.checklist-table select,.checklist-table input[type="text"]{width:100%;padding:3px 5px;border:2px solid #b3d9ff;border-radius:4px;font-size:11px;font-weight:bold;background:white;line-height:1.3;}
+.checklist-table select:focus,.checklist-table input[type="text"]:focus{outline:none;border-color:#4a90e2;}
+.checklist-table textarea{width:100%;padding:3px;border:2px solid #b3d9ff;border-radius:4px;font-size:11px;resize:vertical;min-height:28px;line-height:1.3;}
+/* dual answer cells */
+.dual-ans{display:flex;flex-direction:column;gap:3px;}
+.dual-ans label{font-size:10px;font-weight:bold;color:#555;margin-bottom:0;}
+/* Signature section */
+.sig-row{display:flex;gap:14px;margin-top:10px;justify-content:flex-start;align-items:flex-start;}
+.sig-box{flex:0 0 48%;max-width:420px;background:white;border:2px solid #b3d9ff;border-radius:8px;padding:10px 14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+#cliOtherName{display:none;margin-top:5px;width:100%;padding:4px 6px;border:2px solid #f0a500;border-radius:5px;font-size:11px;font-weight:bold;background:#fffbe6;text-transform:uppercase;}
+.sig-box h4{color:#1a237e;font-size:12px;font-weight:bold;text-transform:uppercase;margin-bottom:6px;border-bottom:2px solid #4a90e2;padding-bottom:4px;}
+.sig-box label{display:block;font-weight:bold;font-size:11px;color:#1a237e;margin-bottom:3px;text-align:left;}
+.sig-box select,.sig-box input[type="file"]{width:100%;padding:4px 6px;border:2px solid #b3d9ff;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:6px;}
+.sig-box input[type="date"]{width:100%;padding:4px 6px;border:2px solid #b3d9ff;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:6px;}
+.sig-preview{margin-top:6px;display:none;text-align:center;}
+.sig-preview img{max-width:180px;max-height:70px;border:2px solid #4a90e2;border-radius:5px;}
+/* Button group */
+.button-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px;width:100%;text-align:center;}
+button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-radius:8px;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+.save-draft-btn{background:linear-gradient(135deg,#9b59b6,#8e44ad);color:white;}
+.save-draft-btn:hover{background:linear-gradient(135deg,#8e44ad,#7d3c98);transform:translateY(-2px);}
+.upload-draft-btn{background:linear-gradient(135deg,#16a085,#138d75);color:white;}
+.upload-draft-btn:hover{background:linear-gradient(135deg,#138d75,#117a65);transform:translateY(-2px);}
+.submit-btn{background:linear-gradient(135deg,#3498db,#2980b9);color:white;}
+.submit-btn:hover{background:linear-gradient(135deg,#2980b9,#21618c);transform:translateY(-2px);}
+.pdf-btn{background:linear-gradient(135deg,#e67e22,#d35400);color:white;}
+.pdf-btn:hover{background:linear-gradient(135deg,#d35400,#ba4a00);transform:translateY(-2px);}
+.message{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:18px 32px;border-radius:12px;text-align:center;font-weight:bold;font-size:1.05em;box-shadow:0 8px 32px rgba(0,0,0,0.25);min-width:280px;max-width:480px;}
+.message.success{background:#d4edda;color:#155724;border:2px solid #c3e6cb;}
+.message.error{background:#f8d7da;color:#721c24;border:2px solid #f5c6cb;}
+.message-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.18);z-index:9998;}
+.section-badge{display:inline-block;background:#1a237e;color:#FFD700;font-size:10px;font-weight:bold;padding:2px 8px;border-radius:10px;margin-right:6px;letter-spacing:1px;}
+@media(max-width:768px){.info-fields{flex-direction:column;}.info-field{flex:1 1 100%;}.sig-row{flex-direction:column;}.button-group{flex-direction:column;}button{width:100%;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h3>SFT-6</h3>
+    <h1>Crew Booking / Lobby Inspection Report</h1>
+      <h6>Detailed departmental inspection to be carried out as per checklist of respective department</h6>
+    <h2>Raipur Division</h2>
+     </div>
+
+  <div class="form-container">
+     <!-- ═══ LOBBY PARTICULARS ═══ -->
+    <div class="info-section">
+      
+      <div class="info-fields">
+        <div class="info-field">
+          
+        </div>
+        <div class="info-field">
+         
+        </div>
+      </div>
+      <div class="info-fields">
+        <div class="info-field">
+          
+        </div>
+       
+        </div>
+      </div>
+      <div class="info-fields">
+        <div class="info-field">
+        
+     
+           
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LOBBY PARTICULARS ═══ -->
+    <div class="info-section">
+      <h2><span class="section-badge"></span>Crew Booking Office / Lobby Particulars</h2>
+      <div class="info-fields">
+        <div class="info-field">
+          <label for="dateOfInsp">Date of Inspection:</label>
+          <input type="date" id="dateOfInsp">
+        </div>
+        <div class="info-field">
+          <label for="lobbyName">Name of Lobby:</label>
+          <input type="text" id="lobbyName" placeholder="">
+        </div>
+      </div>
+      <div class="info-fields">
+        <div class="info-field">
+          <label for="cbsName">Name of Crew Booking Supervisor:</label>
+          <input type="text" id="cbsName" placeholder="">
+        </div>
+        <div class="info-field">
+          <label for="diClerkName">Name of DI / Booking Clerk:</label>
+          <input type="text" id="diClerkName" placeholder="">
+        </div>
+      </div>
+      <div class="info-fields">
+        <div class="info-field">
+        
+     
+           
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SECTION 1: SN ITEMS ═══ -->
+    <div class="info-section">
+      <h2><span class="section-badge"></span>LOBBY WORKING</h2>
+      <div style="overflow-x:auto;">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th style="width:38px;">SN</th>
+            <th>Items</th>
+            <th style="width:200px;">Answer / Status</th>
+            <th style="width:230px;">Observations / Deficiencies / Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 1 -->
+          <tr>
+            <td>1</td>
+            <td class="q-cell">Sign 'ON' &amp; Sign 'OFF' through CMS or Chalak Dal App</td>
+            <td class="ans-cell">
+              <div class="dual-ans">
+                <div><label>Crew:</label>
+                  <select id="signOnCrew">
+               
+                    <option value="THROUGH CMS">Through CMS</option>
+                    <option value="CHALAK DAL APP">Chalak Dal App</option>
+                    <option value="MANUAL">Manual</option>
+                  </select>
+                </div>
+                <div><label>Guard:</label>
+                  <select id="signOnGuard">
+              
+                    <option value="THROUGH CMS">Through CMS</option>
+                    <option value="CHALAK DAL APP">Chalak Dal App</option>
+                    <option value="MANUAL">Manual</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td class="obs-cell"><textarea id="obs1" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 2 -->
+          <tr>
+            <td>2</td>
+            <td class="q-cell">Whether Sign ON &amp; Sign OFF registers are properly maintained?</td>
+            <td class="ans-cell">
+              <div class="dual-ans">
+                <div><label>Crew:</label>
+                  <select id="regCrewMaintained">
+                                       <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                  </select>
+                </div>
+                <div><label>Guard:</label>
+                  <select id="regGuardMaintained">
+                                      <option value="YES">Yes</option>
+                    <option value="NO">No</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td class="obs-cell"><textarea id="obs2" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 3 -->
+          <tr>
+            <td>3</td>
+            <td class="q-cell">
+              a. Working of CMS/Kiosk (no. working):<br><br>
+              b. Working of Kiosk integrated with BA Biometric:<br><br>
+          
+            </td>
+            <td class="ans-cell">
+              <div class="dual-ans">
+                <div><label>Kiosk No. Working:</label>
+                  <input type="text" id="cmsKioskWorking" placeholder="e.g. 2 of 3">
+                </div>
+                <div><label>BA :</label>
+                  <select id="kioskBiometric">
+                    <option value="WORKING">WORKING</option>
+                    <option value="NO">NOT WORKING</option>
+                    <option value="PARTIAL">PARTIAL</option>
+                  </select>
+                </div>
+                 <div><label> Biometric:</label>
+                  <select id="kioskBiometric">
+                    <option value="YES">WORKING</option>
+                    <option value="NO">NOT WORKING</option>
+                    <option value="PARTIAL">PARTIAL</option>
+                  </select>
+                </div>
+                <div><label>CCTV:</label>
+                  <select id="cctvItem3">
+                    <option value="WORKING">WORKING</option>
+                    <option value="NOT WORKING">NOT WORKING</option>
+                    <option value="PARTIAL">PARTIAL</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td class="obs-cell"><textarea id="obs3" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 4 -->
+          <tr>
+            <td>4</td>
+            <td class="q-cell">CMS Link Failures (Register available with CMS operator)</td>
+            <td class="ans-cell">
+              <select id="cmsLinkFailures">
+              
+                <option value="REGISTER AVAILABLE">Register Available</option>
+                <option value="REGISTER NOT AVAILABLE">Register Not Available</option>
+               
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs4" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 5 -->
+          <tr>
+            <td>5</td>
+            <td class="q-cell">Safety posters &amp; slogans</td>
+            <td class="ans-cell">
+              <select id="safetyPosters">
+           
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs5" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 6 -->
+          <tr>
+            <td>6</td>
+            <td class="q-cell">List of Signal located on right hand side</td>
+            <td class="ans-cell">
+              <select id="signalList">
+              
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs6" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 7 -->
+          <tr>
+            <td>7</td>
+            <td class="q-cell">SPAD display Board</td>
+            <td class="ans-cell">
+              <select id="spadBoard">
+         
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs7" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 8 -->
+          <tr>
+            <td>8</td>
+            <td class="q-cell">Breathe Analyzers, their calibration date &amp; sample testing</td>
+            <td class="ans-cell">
+              <select id="baAvailable">
+           
+                <option value="AVAILABLE &amp; CALIBRATED">Available &amp; Calibrated</option>
+                <option value="AVAILABLE - CALIBRATION DUE">Available – Calibration Due</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs8" placeholder=""></textarea></td>
+          </tr>
+          <!-- 9 -->
+          <tr>
+            <td>9</td>
+            <td class="q-cell">General upkeep of the lobby &amp; Housekeeping</td>
+            <td class="ans-cell">
+              <select id="lobbyUpkeep">
+             
+              
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs9" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 10 -->
+          <tr>
+            <td>10</td>
+            <td class="q-cell">Whether staff coming on duty are in proper uniform</td>
+            <td class="ans-cell">
+              <select id="properUniform">
+               
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs10" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 11 -->
+          <tr>
+            <td>11</td>
+            <td class="q-cell">Whether Latest safety circulars, safety bulletins and HQ bulletins, correction slips of G&amp;SR and other rule books are displayed in respective files? Are all acknowledged by Crew/Guard?</td>
+            <td class="ans-cell">
+              <div class="dual-ans">
+                <div><label>Crew:</label>
+                  <select id="safetyCircularCrew">
+                  
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+                <div><label>Guard:</label>
+                  <select id="safetyCircularGuard">
+               
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+              </div>
+            </td>
+            <td class="obs-cell"><textarea id="obs11" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 12 -->
+          <tr>
+            <td>12</td>
+            <td class="q-cell">Unusual occurrences register. Prompt action on unusual reported by Crew/Guard within stipulated time. Recording of proper feedback.</td>
+            <td class="ans-cell"> <div><label>Crew:</label>
+               
+              
+              <select id="unusualOccReg">
+             
+                <option value="AVAILABLE &amp; UPDATED">Available &amp; Updated</option>
+                <option value="AVAILABLE - ACTION PENDING">Available – Action Pending</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+               </div>
+                <div><label>Guard:</label>
+                  <select id="safetyCircularGuard">
+               
+                    <option value="YES">Available</option>
+                    <option value="NO">Not Available</option>
+            </td>
+            <td class="obs-cell"><textarea id="obs12" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 13 -->
+          <tr>
+            <td>13</td>
+            <td class="q-cell">Availability of LR due register</td>
+            <td class="ans-cell">
+               <div><label>Crew:</label>
+              <select id="lrDueReg">
+              <div><label>Crew:</label>
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+              <div><label>Guard:</label>
+                  <select id="safetyCircularGuard">
+               
+                    <option value="YES">Available</option>
+                    <option value="NO">Not Available</option>
+            </td>
+            <td class="obs-cell"><textarea id="obs13" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 14 -->
+          <tr>
+            <td>14</td>
+            <td class="q-cell">Availability of speed gun</td>
+            <td class="ans-cell">
+              <select id="speedGun">
+             
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+                <option value="UNDER MAINTENANCE">Under Maintenance</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obs14" placeholder="Observations..."></textarea></td>
+          </tr>
+          <!-- 15 -->
+          <tr>
+          
+            
+   
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- ═══ GENERAL CHECKS ═══ -->
+    <div class="info-section">
+      <h2><span class="section-badge"></span>General Checks</h2>
+      <div style="overflow-x:auto;">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th style="width:38px;">SN</th>
+            <th>Items</th>
+            <th style="width:200px;">Answer / Status</th>
+            <th style="width:230px;">Observations / Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="q-cell">Availability and working of CCTV camera</td>
+            <td class="ans-cell">
+              <select id="cctvGeneral">
+             
+                <option value="AVAILABLE &amp; WORKING">Available &amp; Working</option>
+                <option value="AVAILABLE - NOT WORKING">Available – Not Working</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+                <option value="PARTIAL">Partial</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsG1" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="q-cell">Whether First Aid Box available? Due date of Refilling.</td>
+            <td class="ans-cell">
+              <select id="firstAidBox">
+              
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+              <input type="text" id="firstAidRefillDate" placeholder="" style="margin-top:5px;">
+            </td>
+            <td class="obs-cell"><textarea id="obsG2" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="q-cell">Availability of fire extinguishers, whether due for inspection/refilling</td>
+            <td class="ans-cell">
+              <select id="fireExtinguisher">
+             
+                <option value="AVAILABLE &amp; VALID">Available &amp; Valid</option>
+                <option value="DUE FOR INSPECTION">Due for Inspection</option>
+                <option value="DUE FOR REFILLING">Due for Refilling</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsG3" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="q-cell">Last date of cleaning of water cooler &amp; water purifier</td>
+            <td class="ans-cell"><input type="text" id="waterCoolerDate" placeholder=""></td>
+            <td class="obs-cell"><textarea id="obsG4" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="q-cell">General cleanliness including toilets</td>
+            <td class="ans-cell">
+              <select id="generalCleanliness">
+              <option value="SATISFACTORY">Good</option>
+                <option value="SATISFACTORY">Satisfactory</option>
+                <option value="UNSATISFACTORY">Unsatisfactory</option>
+                <option value="NEEDS IMPROVEMENT">Needs Improvement</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsG5" placeholder="Observations..."></textarea></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- ═══ CMS & CREW RELATED ═══ -->
+    <div class="info-section">
+      <h2><span class="section-badge"></span>CCC OFFICE</h2>
+      <div style="overflow-x:auto;">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th style="width:38px;">SN</th>
+            <th>Items</th>
+            <th style="width:200px;">Answer / Value</th>
+            <th style="width:230px;">Observations / Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="q-cell">Whether list of staff addicted to alcoholic drinks is available with lobby incharge?</td>
+            <td class="ans-cell">
+              <select id="alcoholList">
+                
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsC1" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="q-cell">Whether the list of Senior Goods LPs who have been screened and found fit to work on passenger trains is available?</td>
+            <td class="ans-cell">
+              <select id="seniorGoodsLP">
+              
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsC2" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="q-cell">Details of LPs/Guards due for PME/Refresher</td>
+            <td class="ans-cell">
+              <select id="pmeRefresher">
+              
+                <option value="AVAILABLE">Available</option>
+                <option value="NOT AVAILABLE">Not Available</option>
+              </select>
+            </td>
+            <td class="obs-cell"><textarea id="obsC3" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="q-cell">Average PDD in last one month (take help of on duty CC)</td>
+            <td class="ans-cell"><input type="text" id="avgPDD" placeholder="AVG PDD VALUE"></td>
+            <td class="obs-cell"><textarea id="obsC4" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="q-cell">Average Periodical Rest (PR) of LP, ALP &amp; Guard in last month</td>
+            <td class="ans-cell"><input type="text" id="avgPR" placeholder=""></td>
+            <td class="obs-cell"><textarea id="obsC5" placeholder="Observations..."></textarea></td>
+          </tr>
+          <tr>
+            
+         
+          
+          
+        
+           
+            </td>
+          
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- ═══ STAFF GRIEVANCE SYSTEM ═══ -->
+    <div class="info-section">
+      <h2><span class="section-badge"></span>Staff Grievance System</h2>
+      <div style="overflow-x:auto;">
+      <table class="checklist-table">
+        <thead>
+          <tr>
+            <th style="width:38px;">SN</th>
+            <th>Items</th>
+            <th style="width:120px;">Answer</th>
+            <th style="width:250px;">Observations / Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="q-cell">Whether Grievance Register is available?</td>
+            <td class="ans-cell"><select id="grievanceReg"></option><option value="YES">Yes</option><option value="NO">No</option></select></td>
+            <td class="obs-cell"><textarea id="obsS1" placeholder="Remarks..."></textarea></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="q-cell">Whether any pending staff grievance?</td>
+            <td class="ans-cell"><select id="pendingGrievance"></option><option value="YES">Yes</option><option value="NO">No</option></select></td>
+            <td class="obs-cell"><textarea id="obsS2" placeholder="Remarks..."></textarea></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="q-cell">Whether the employees are aware of the staff welfare initiatives and recreational facilities accessible to them?</td>
+            <td class="ans-cell"><select id="welfareAware"><option value="YES">Yes</option><option value="NO">No</option></select></td>
+            <td class="obs-cell"><textarea id="obsS3" placeholder="Remarks..."></textarea></td>
+          </tr>
+          <tr>
+          
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- ═══ OTHER DEFICIENCIES ═══ -->
+    <div class="info-section">
+  
+      <div class="info-fields">
+        <div class="info-field full-width">
+          <label for="otherDeficiency">Any other deficiency noticed / suggestion to improve the condition of Crew/Guard Lobby:</label>
+          <textarea id="otherDeficiency" rows="3" placeholder=""></textarea>
+        </div>
+      </div>
+      <div class="info-fields">
+        <div class="info-field">
+         
+      
+        </div>
+        
+         
+        
+      
+  
+
+    <!-- ═══ DUAL SIGNATURE SECTION ═══ -->
+    <div class="info-section">
+      <div class="sig-row">
+
+        <!-- LEFT SIGNATURE -->
+        <div class="sig-box">
+          <label for="cliName1">CLI Name and HQ:</label>
+          <select id="cliName1" onchange="handleCliOther(this)">
+            <option value="">Select CLI Name and HQ</option>
+            <option value="A K REDDY/CLI/BIA">A K REDDY/CLI/BIA</option>
+            <option value="A.R.TARAM/CLI/BIA">A.R. TARAM/CLI/BIA</option>
+            <option value="ABDUL MOIN KHAN/CLI/BIA">ABDUL MOIN KHAN/CLI/BIA</option>
+            <option value="AKHILESH KUMAR/CLI/BIA">AKHILESH KUMAR/CLI/BIA</option>
+            <option value="AMIT KUMAR BANKURE/CLI/BYT">AMIT KUMAR BANKURE/CLI/BYT</option>
+            <option value="ANANT PRAKASH SHRIVASTAVA/CLI/BIA">ANANT PRAKASH SHRIVASTAVA/CLI/BIA</option>
+            <option value="ANIL KUMAR/CLI/BIA">ANIL KUMAR/CLI/BIA</option>
+            <option value="ANKIT RAM KANT/CLI/BIA">ANKIT RAM KANT/CLI/BIA</option>
+            <option value="AVON KUMAR SAHU/CLI/R">AVON KUMAR SAHU/CLI/R</option>
+            <option value="ASHISH WANJARI/CLI/BYT">ASHISH WANJARI/CLI/BYT</option>
+            <option value="B B KUSHWAHA/CLI/BIA">B B KUSHWAHA/CLI/BIA</option>
+            <option value="B K HARMUKH/CLI/BIA">B K HARMUKH/CLI/BIA</option>
+            <option value="B. K. SAHA/CLI/BIA">B. K. SAHA/CLI/BIA</option>
+            <option value="B.K.SONI/CLI/BIA">B.K.SONI/CLI/BIA</option>
+            <option value="BHARAT SINGH ATBHAIYYA/CLI/R">BHARAT SINGH ATBHAIYYA/CLI/R</option>
+            <option value="BHOLI CHAUDHARY/CLI/R">BHOLI CHAUDHARY/CLI/R</option>
+            <option value="BIKRAMJIT KANRAR/CLI/BIA">BIKRAMJIT KANRAR/CLI/BIA</option>
+            <option value="BINOD KUMAR RAM/CLI/R">BINOD KUMAR RAM/CLI/R</option>
+            <option value="DEEPANNITA PUNTAMBEKAR/CLI/BIA">DEEPANNITA PUNTAMBEKAR/CLI/BIA</option>
+            <option value="DILLI RAO/CLI/BYT">DILLI RAO/CLI/BYT</option>
+            <option value="G. C. BISWAS/CLI/R">G. C. BISWAS/CLI/R</option>
+            <option value="G. V. R. K. MADHU/CLI/BIA">G. V. R. K. MADHU/CLI/BIA</option>
+            <option value="GIRDHARI LAL/CLI/R">GIRDHARI LAL/CLI/R</option>
+            <option value="JAISHANKAR SHARMA/CLI/BIA">JAISHANKAR SHARMA/CLI/BIA</option>
+            <option value="JITENDRA KUMAR MISHRA/CLI/BYT">JITENDRA KUMAR MISHRA/CLI/BYT</option>
+            <option value="K P LAHARE/CLI/R">K P LAHARE/CLI/R</option>
+            <option value="K P HIRWANI/CLI/BYT">K P HIRWANI/CLI/BYT</option>
+            <option value="K. K. SAHU/CLI/BIA">K. K. SAHU/CLI/BIA</option>
+            <option value="KHUSAL SINGH/CLI/DRZ">KHUSAL SINGH/CLI/DRZ</option>
+            <option value="MAHESHWAR/CLI/BIA">MAHESHWAR/CLI/BIA</option>
+            <option value="MANOJ KUMAR SAO/CLI/R">MANOJ KUMAR SAO/CLI/R</option>
+            <option value="MANSUKH LAL CHANDRAKAR/CLI/R">MANSUKH LAL CHANDRAKAR/CLI/R</option>
+            <option value="MOHIT KUMAR SWARNKAR/CLI/BIA">MOHIT KUMAR SWARNKAR/CLI/BIA</option>
+            <option value="N. R. KARPAL/CLI/BIA">N. R. KARPAL/CLI/BIA</option>
+            <option value="N.K. BHOI/CLI/R">N.K. BHOI/CLI/R</option>
+            <option value="NITIN KUKDE/CLI/BYT">NITIN KUKDE/CLI/BYT</option>
+            <option value="NIRMAL KUMAR/CLI/BYT">NIRMAL KUMAR/CLI/BYT</option>
+            <option value="P.K. PATEL/CLI/BIA">P.K. PATEL/CLI/BIA</option>
+            <option value="PANKAJ KUMAR SINGH/CLI/BIA">PANKAJ KUMAR SINGH/CLI/BIA</option>
+            <option value="PAWAN KUMAR SINGH/CLI/BIA">PAWAN KUMAR SINGH/CLI/BIA</option>
+            <option value="PURAN LAL PATEL/CLI/BYT">PURAN LAL PATEL/CLI/BYT</option>
+            <option value="RAJENDRA KUMAR/CLI/BIA">RAJENDRA KUMAR/CLI/BIA</option>
+            <option value="PALAK RAM ALENDRA/CLI/DRZ">PALAK RAM ALENDRA/CLI/DRZ</option>
+            <option value="RAJESH KUMAR DESHMUKH/CLI/R">RAJESH KUMAR DESHMUKH/CLI/R</option>
+            <option value="RAJNEESH BENERJEE/CLI/BIA">RAJNEESH BENERJEE/CLI/BIA</option>
+            <option value="RANJEET SINGH/CLI/BYT">RANJEET SINGH/CLI/BYT</option>
+            <option value="RAKESH KUMAR KOSTA/CLI/DRZ">RAKESH KUMAR KOSTA/CLI/DRZ</option>
+            <option value="S K GAUTAM/CLI/BIA">S K GAUTAM/CLI/BIA</option>
+            <option value="S S HUSSAIN/CLI/BIA">S S HUSSAIN/CLI/BIA</option>
+            <option value="S. C. RAI/CLI/BIA">S. C. RAI/CLI/BIA</option>
+            <option value="S. K. SINGH/CLI/BIA">S. K. SINGH/CLI/BIA</option>
+            <option value="S. L. SONI/CLI/R">S. L. SONI/CLI/R</option>
+            <option value="SANJAY KUMAR ROY/CLI/BIA">SANJAY KUMAR ROY/CLI/BIA</option>
+            <option value="SANJAY SINGH/CLI/BYT">SANJAY SINGH/CLI/BYT</option>
+            <option value="SANJEEV KUMAR SHARMA/CLI/BIA">SANJEEV KUMAR SHARMA/CLI/BIA</option>
+            <option value="SANTOSH KUMAR PATKAR/CLI/BIA">SANTOSH KUMAR PATKAR/CLI/BIA</option>
+            <option value="SHAILENDRA SINGH/CLI/BIA">SHAILENDRA SINGH/CLI/BIA</option>
+            <option value="SUNDEEP KUMAR SHARMA/CLI/BIA">SUNDEEP KUMAR SHARMA/CLI/BIA</option>
+            <option value="SUNIL KUMAR DEWANGAN/CLI/BIA">SUNIL KUMAR DEWANGAN/CLI/BIA</option>
+            <option value="SANAT KUMAR SAHU/CLI/DRZ">SANAT KUMAR SAHU/CLI/DRZ</option>
+            <option value="V.K. BHAGAT/CLI/R">V.K. BHAGAT/CLI/R</option>
+            <option value="VIJAY KUMAR ARYA/CLI/BIA">VIJAY KUMAR ARYA/CLI/BIA</option>
+            <option value="VIKAS SHENDE/CLI/BIA">VIKAS SHENDE/CLI/BIA</option>
+            <option value="VINAY KUMAR VINCHURE/CLI/BIA">VINAY KUMAR VINCHURE/CLI/BIA</option>
+            <option value="VINAY PANTAWANE/CLI/BIA">VINAY PANTAWANE/CLI/BIA</option>
+            <option value="Y. RAMU/CLI/BIA">Y. RAMU/CLI/BIA</option>
+            <option value="YOGESH KUMAR MIHAULIA/CLI/BIA">YOGESH KUMAR MIHAULIA/CLI/BIA</option>
+            <option value="OTHERS">OTHERS</option>
+          </select>
+          <input type="text" id="cliOtherName" placeholder="Enter CLI Name and HQ manually...">
+          <label for="sig1Upload" style="margin-top:8px;">Upload Signature:</label>
+          <input type="file" id="sig1Upload" accept="image/*" onchange="previewSig(event,'sig1Preview','sig1Img')">
+          <div id="sig1Preview" class="sig-preview">
+            <img id="sig1Img" alt="Signature 1">
+            
+          </div>
+            <label for="inspDate">Date:</label>
+          <input type="date" id="inspDate">
+        </div>
+
+      </div>
+    </div>
+
+    <input type="file" id="draftFileInput" accept=".json" style="display:none;" onchange="handleDraftUpload(event)">
+
+    <div class="button-group">
+      <button class="save-draft-btn" onclick="saveDraft()">💾 Save Draft</button>
+      <button class="upload-draft-btn" onclick="document.getElementById('draftFileInput').click()">📂 Upload Draft</button>
+      <button class="submit-btn" onclick="submitForm()">✅ Submit</button>
+      <button class="pdf-btn" onclick="generatePDF()">📄 Generate PDF</button>
+    </div>
+    <div id="messageOverlay" class="message-overlay"></div>
+    <div id="message" class="message"></div>
+  </div>
+</div>
+
+<script>
+// ── Signature Preview ────────────────────────────────────────────────
+function previewSig(event, previewId, imgId) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById(imgId).src = e.target.result;
+      document.getElementById(previewId).style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// ── Show Message ─────────────────────────────────────────────────────
+function showMessage(text, type) {
+  const m = document.getElementById('message');
+  const ov = document.getElementById('messageOverlay');
+  m.textContent = text;
+  m.className = 'message ' + type;
+  m.style.display = 'block';
+  ov.style.display = 'block';
+  clearTimeout(window._msgTimer);
+  window._msgTimer = setTimeout(() => {
+    m.style.display = 'none';
+    ov.style.display = 'none';
+  }, 3500);
+}
+
+// ── Get all form values ───────────────────────────────────────────────
+function getVal(id){ return (document.getElementById(id)||{}).value||''; }
+
+// ── Submitted flag ────────────────────────────────────────────────────
+let formSubmitted = false;
+let pdfGenerated = false;
+
+// ── Handle CLI "OTHERS" selection ─────────────────────────────────────
+function handleCliOther(sel) {
+  const otherBox = document.getElementById('cliOtherName');
+  if (sel.value === 'OTHERS') {
+    otherBox.style.display = 'block';
+    otherBox.focus();
+  } else {
+    otherBox.style.display = 'none';
+    otherBox.value = '';
+  }
+  resetPDF();
+}
+
+// ── Reset PDF state when form changes ────────────────────────────────
+function resetPDF() {
+  pdfGenerated = false;
+  formSubmitted = false;
+  showMessage('⚠️ Form changed — please Submit again before generating PDF.', 'error');
+}
+
+// ── Track form changes to reset PDF ──────────────────────────────────
+document.addEventListener('change', function(e) {
+  if (e.target.id !== 'draftFileInput' && pdfGenerated) resetPDF();
+});
+document.addEventListener('input', function(e) {
+  if (pdfGenerated) resetPDF();
+});
+
+// ── Submit → Google Sheets ────────────────────────────────────────────
+async function submitForm() {
+  // Gather the key fields to save
+  let cliName = getVal('cliName1');
+  if (cliName === 'OTHERS') cliName = getVal('cliOtherName') || 'OTHERS';
+
+  const payload = {
+    cliNameHQ:        cliName,
+    dateOfInspection: getVal('dateOfInsp'),
+    lobbyName:        getVal('lobbyName'),
+    bookingSupervisor:getVal('cbsName'),
+    otherDeficiency:  getVal('otherDeficiency')
+  };
+
+  // Google Apps Script Web App URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGIotF2PhhhmX9vEvCDJDrFFFfSmX5O10a_T-sujkKDw3CcOT9tECAdNm6dbASOQWf_A/exec';
+
+  showMessage('⏳ Submitting to Google Sheets...', 'success');
+
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    // no-cors means we can't read the response, but it fires
+    formSubmitted = true;
+    showMessage('✅ Submitted! Data saved to Google Sheets. You may now generate PDF.', 'success');
+  } catch(err) {
+    // Still allow PDF generation even if sheet fails
+    formSubmitted = true;
+    showMessage('⚠️ Sheet save failed (check Apps Script URL), but PDF can still be generated.', 'error');
+  }
+}
+
+// ── Save Draft ───────────────────────────────────────────────────────
+function saveDraft() {
+  const ids = ['dateOfInsp','lobbyName','cbsName','diClerkName','lobbyWorking',
+    'signOnCrew','signOnGuard','obs1','regCrewMaintained','regGuardMaintained','obs2',
+    'cmsKioskWorking','kioskBiometric','cctvItem3','obs3','cmsLinkFailures','obs4',
+    'safetyPosters','obs5','signalList','obs6','spadBoard','obs7','baAvailable','obs8',
+    'lobbyUpkeep','obs9','properUniform','obs10','safetyCircularCrew','safetyCircularGuard','obs11',
+    'unusualOccReg','obs12','lrDueReg','obs13','speedGun','obs14','crewRHQReg','obs15',
+    'cctvGeneral','obsG1','firstAidBox','firstAidRefillDate','obsG2','fireExtinguisher','obsG3',
+    'waterCoolerDate','obsG4','generalCleanliness','obsG5',
+    'alcoholList','obsC1','seniorGoodsLP','obsC2','pmeRefresher','obsC3',
+    'avgPDD','obsC4','avgPR','obsC5','fetchPercent','obsC6','manualSignOn','manualSignOff','obsC7',
+    'longHoursPercent','obsC8','abnormalityPercent','obsC9','mobileDeclarationLP','obsC10',
+    'utilizationLP','obsC11','lpRatio','obsC12','cvvrsCLI','obsC13',
+    'grievanceReg','obsS1','pendingGrievance','obsS2','welfareAware','obsS3','payGrievance','obsS4',
+    'promotionMACP','obsS5','hrmsPass','obsS6','hrmsLeave','obsS7','uniformAllowance','obsS8',
+    'otherDeficiency','placeField','inspDate','cliName1','cliName2'];
+  const d = {};
+  ids.forEach(id => d[id] = getVal(id));
+  const blob = new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'SFT6_Draft_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showMessage('Draft saved successfully!', 'success');
+}
+
+// ── Upload Draft ──────────────────────────────────────────────────────
+function handleDraftUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      Object.keys(d).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = d[id];
+      });
+      showMessage('Draft uploaded successfully!', 'success');
+    } catch(err) {
+      showMessage('Error loading draft file.', 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ── PDF Generation ────────────────────────────────────────────────────
+function generatePDF() {
+  if (!formSubmitted) {
+    showMessage('⚠️ FIRST SUBMIT DATA before generating PDF!', 'error');
+    return;
+  }
+  pdfGenerated = true;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p','mm','a4');
+  const PW = doc.internal.pageSize.getWidth(); // 210
+  const PH = doc.internal.pageSize.getHeight(); // 297
+  const ML = 10, MR = PW - 10;
+  const CW = MR - ML;
+  let y = 0;
+
+  // ─── Navy Header ───────────────────────────────────────────────────
+  doc.setFillColor(26,35,126);
+  doc.rect(0,0,PW,30,'F');
+  doc.setDrawColor(255,215,0);
+  doc.setLineWidth(1.5);
+  doc.line(0,30,PW,30);
+
+  doc.setFontSize(10); doc.setFont(undefined,'bold'); doc.setTextColor(255,255,255);
+  doc.text('SFT-6', PW/2, 9, {align:'center'});
+  doc.setFontSize(20);
+  doc.text('CREW BOOKING / LOBBY INSPECTION REPORT', PW/2, 18, {align:'center'});
+  doc.setFontSize(12); doc.setFont(undefined,'bold'); doc.setTextColor(255,215,0);
+  doc.text('RAIPUR DIVISION ', PW/2, 26, {align:'center'});
+
+  y = 35;
+
+  // ─── Helper functions ───────────────────────────────────────────────
+  function checkPage(needed) {
+    if (y + needed > PH - 25) { doc.addPage(); addPageHeader(); y = 38; }
+  }
+
+  function addPageHeader() {
+    doc.setFillColor(26,35,126);
+    doc.rect(0,0,PW,14,'F');
+    doc.setFontSize(9); doc.setFont(undefined,'bold'); doc.setTextColor(255,215,0);
+    doc.text('SFT-6 — CREW BOOKING / LOBBY INSPECTION REPORT — RAIPUR DIVISION', PW/2, 9, {align:'center'});
+    doc.setDrawColor(255,215,0); doc.setLineWidth(0.8);
+    doc.line(0,14,PW,14);
+  }
+
+  function sectionHeader(title) {
+    checkPage(14);
+    doc.setFillColor(30,90,160);
+    doc.roundedRect(ML, y, CW, 7, 1, 1, 'F');
+    doc.setFontSize(9); doc.setFont(undefined,'bold'); doc.setTextColor(255,255,255);
+    doc.text(title.toUpperCase(), ML+3, y+5);
+    doc.setTextColor(0,0,0);
+    y += 7;
+  }
+
+  function fieldRow2(lbl1, val1, lbl2, val2) {
+    checkPage(7);
+    doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
+    doc.text(lbl1+':', ML+2, y);
+    doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
+    doc.text(String(val1||'—'), ML+2+38, y);
+    if(lbl2!==null){
+      doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
+      doc.text(lbl2+':', PW/2+2, y);
+      doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
+      doc.text(String(val2||'—'), PW/2+2+38, y);
+    }
+    y += 6;
+  }
+
+  // Color for Yes/No/Available badges
+  function ansColor(v) {
+    if(!v||v==='') return [255,255,255];
+    const vU = v.toUpperCase();
+    if(vU==='YES'||vU==='AVAILABLE'||vU==='AVAILABLE & CALIBRATED'||vU==='AVAILABLE & UPDATED'||vU==='AVAILABLE & VALID'||vU==='SATISFACTORY'||vU==='REGISTER AVAILABLE'||vU==='THROUGH CMS'||vU==='CHALAK DAL APP') return [255,255,255];
+    if(vU==='NO'||vU.includes('NOT AVAILABLE')||vU.includes('NOT WORKING')||vU==='UNSATISFACTORY') return [255,255,255];
+    if(vU==='PARTIAL'||vU.includes('DUE')||vU==='NEEDS IMPROVEMENT'||vU==='MANUAL') return [255,255,255];
+    if(vU.includes('WORKING')) return [255,255,255];
+    return [255,255,255];
+  }
+
+  function tableSection(title, rows) {
+    // rows: [{sn, question, answer, obs}]
+    checkPage(20);
+    sectionHeader(title);
+    const colW = [10, 80, 50, 55];
+    const headers = ['SN','Item','Answer / Status','Observations'];
+
+    // Header row
+    doc.setFillColor(70,120,190);
+    doc.rect(ML, y, CW, 7, 'F');
+    doc.setFontSize(8); doc.setFont(undefined,'bold'); doc.setTextColor(255,255,255);
+    let cx = ML;
+    headers.forEach((h,i)=>{
+      doc.text(h, cx+colW[i]/2, y+5, {align:'center'});
+      cx += colW[i];
+    });
+    y += 7;
+
+    rows.forEach((row,ri) => {
+      const ansLines = doc.splitTextToSize(String(row.answer||'—'), colW[2]-4);
+      const obsLines = doc.splitTextToSize(String(row.obs||''), colW[3]-4);
+      const qLines  = doc.splitTextToSize(String(row.question||''), colW[1]-4);
+      const lineH = 4.5;
+      const rowH = Math.max(qLines.length, ansLines.length, obsLines.length, 1) * lineH + 4;
+
+      checkPage(rowH + 2);
+
+      // Row background
+      if(ri%2===0) doc.setFillColor(240,248,255);
+      else doc.setFillColor(255,255,255);
+      doc.rect(ML, y, CW, rowH, 'F');
+
+      // Borders
+      doc.setDrawColor(180,210,240); doc.setLineWidth(0.3);
+      doc.rect(ML, y, CW, rowH, 'S');
+      cx = ML;
+      colW.forEach(w=>{ doc.line(cx,y,cx,y+rowH); cx+=w; });
+
+      // SN
+      doc.setFontSize(8); doc.setFont(undefined,'bold'); doc.setTextColor(26,35,126);
+      doc.text(String(row.sn), ML+colW[0]/2, y+rowH/2+1.5, {align:'center'});
+
+      // Question
+      doc.setFont(undefined,'normal'); doc.setTextColor(30,30,30);
+      doc.text(qLines, ML+colW[0]+2, y+5);
+
+      // Answer badge-style
+      const ac = ansColor(row.answer);
+      doc.setFillColor(...ac);
+      const ansText = String(row.answer||'—');
+      const aX = ML+colW[0]+colW[1]+2;
+      const aW = colW[2]-4;
+      doc.roundedRect(aX, y+2, aW, rowH-4, 1.5, 1.5, 'F');
+      doc.setDrawColor(255,255,255); doc.setLineWidth(0.3);
+      doc.roundedRect(aX, y+2, aW, rowH-4, 1.5, 1.5, 'S');
+      doc.setTextColor(20,20,80); doc.setFont(undefined,'bold'); doc.setFontSize(7.5);
+      const ansWrapped = doc.splitTextToSize(ansText, aW-2);
+      doc.text(ansWrapped, aX+aW/2, y+rowH/2+1, {align:'center'});
+
+      // Obs
+      doc.setFont(undefined,'normal'); doc.setTextColor(50,50,50); doc.setFontSize(7.5);
+      doc.text(obsLines, ML+colW[0]+colW[1]+colW[2]+2, y+5);
+
+      y += rowH;
+    });
+    y += 3;
+  }
+
+  // ─── Section 1: Lobby Particulars ───────────────────────────────
+  sectionHeader('Crew Booking Office / Lobby Particulars');
+  doc.setFillColor(230,240,255);
+  doc.rect(ML, y, CW, 22, 'F');
+  doc.setDrawColor(150,190,230); doc.setLineWidth(0.3);
+  doc.rect(ML, y, CW, 22, 'S');
+  y += 5;
+  fieldRow2('Date of Inspection', getVal('dateOfInsp'), 'Name of Lobby', getVal('lobbyName'));
+  fieldRow2('Crew Booking Supervisor', getVal('cbsName'), 'DI / Booking Clerk', getVal('diClerkName'));
+  y += 3;
+
+  // ─── Section 2: Lobby Working Items ──────────────────────────────
+  const lobbyRows = [
+    {sn:'1', question:"Sign 'ON' & Sign 'OFF' through CMS or Chalak Dal App\nCrew: "+getVal('signOnCrew')+" | Guard: "+getVal('signOnGuard'), answer:"Crew: "+getVal('signOnCrew')+"\nGuard: "+getVal('signOnGuard'), obs:getVal('obs1')},
+    {sn:'2', question:"Sign ON & Sign OFF registers properly maintained?\nCrew: "+getVal('regCrewMaintained')+" | Guard: "+getVal('regGuardMaintained'), answer:"Crew: "+getVal('regCrewMaintained')+"\nGuard: "+getVal('regGuardMaintained'), obs:getVal('obs2')},
+    {sn:'3', question:"a. Working of CMS/Kiosk (no. working)\nb. BA Biometric\nc. CCTV", answer:"Kiosk: "+getVal('cmsKioskWorking')+"\nBA: "+getVal('kioskBiometric')+"\nCCTV: "+getVal('cctvItem3'), obs:getVal('obs3')},
+    {sn:'4', question:'CMS Link Failures (Register available with CMS operator)', answer:getVal('cmsLinkFailures'), obs:getVal('obs4')},
+    {sn:'5', question:'Safety posters & slogans', answer:getVal('safetyPosters'), obs:getVal('obs5')},
+    {sn:'6', question:'List of Signal located on right hand side', answer:getVal('signalList'), obs:getVal('obs6')},
+    {sn:'7', question:'SPAD display Board', answer:getVal('spadBoard'), obs:getVal('obs7')},
+    {sn:'8', question:'Breathe Analyzers, calibration date & sample testing', answer:getVal('baAvailable'), obs:getVal('obs8')},
+    {sn:'9', question:'General upkeep of the lobby & Housekeeping', answer:getVal('lobbyUpkeep'), obs:getVal('obs9')},
+    {sn:'10', question:'Staff coming on duty in proper uniform', answer:getVal('properUniform'), obs:getVal('obs10')},
+    {sn:'11', question:"Latest safety circulars/bulletins acknowledged?\nCrew: "+getVal('safetyCircularCrew')+" | Guard: "+getVal('safetyCircularGuard'), answer:"Crew: "+getVal('safetyCircularCrew')+"\nGuard: "+getVal('safetyCircularGuard'), obs:getVal('obs11')},
+    {sn:'12', question:'Unusual occurrences register. Prompt action within stipulated time.', answer:getVal('unusualOccReg'), obs:getVal('obs12')},
+    {sn:'13', question:'Availability of LR due register', answer:getVal('lrDueReg'), obs:getVal('obs13')},
+    {sn:'14', question:'Availability of speed gun', answer:getVal('speedGun'), obs:getVal('obs14')},
+  ];
+  tableSection('Lobby Working', lobbyRows);
+
+  // ─── Section 3: General Checks ───────────────────────────────────
+  const generalRows = [
+    {sn:'1', question:'Availability and working of CCTV camera', answer:getVal('cctvGeneral'), obs:getVal('obsG1')},
+    {sn:'2', question:'First Aid Box available? Refill date: '+getVal('firstAidRefillDate'), answer:getVal('firstAidBox'), obs:getVal('obsG2')},
+    {sn:'3', question:'Availability of fire extinguishers, due for inspection/refilling', answer:getVal('fireExtinguisher'), obs:getVal('obsG3')},
+    {sn:'4', question:'Last date of cleaning of water cooler & water purifier', answer:getVal('waterCoolerDate')||'—', obs:getVal('obsG4')},
+    {sn:'5', question:'General cleanliness including toilets', answer:getVal('generalCleanliness'), obs:getVal('obsG5')},
+  ];
+  tableSection('General Checks', generalRows);
+
+  // ─── Section 4: CCC Office ────────────────────────────────────────
+  const cccRows = [
+    {sn:'1', question:'List of staff addicted to alcoholic drinks available with lobby incharge?', answer:getVal('alcoholList'), obs:getVal('obsC1')},
+    {sn:'2', question:'List of Senior Goods LPs screened & fit for passenger trains available?', answer:getVal('seniorGoodsLP'), obs:getVal('obsC2')},
+    {sn:'3', question:'Details of LPs/Guards due for PME/Refresher', answer:getVal('pmeRefresher'), obs:getVal('obsC3')},
+    {sn:'4', question:'Average PDD in last one month', answer:getVal('avgPDD'), obs:getVal('obsC4')},
+    {sn:'5', question:'Average Periodical Rest (PR) of LP, ALP & Guard in last month', answer:getVal('avgPR'), obs:getVal('obsC5')},
+  ];
+  tableSection('CCC Office', cccRows);
+
+  // ─── Section 5: Staff Grievance System ───────────────────────────
+  const grievanceRows = [
+    {sn:'1', question:'Whether Grievance Register is available?', answer:getVal('grievanceReg'), obs:getVal('obsS1')},
+    {sn:'2', question:'Whether any pending staff grievance?', answer:getVal('pendingGrievance'), obs:getVal('obsS2')},
+    {sn:'3', question:'Whether employees are aware of staff welfare initiatives and recreational facilities?', answer:getVal('welfareAware'), obs:getVal('obsS3')},
+  ];
+  tableSection('Staff Grievance System', grievanceRows);
+
+  // ─── Section 6: Other Deficiencies ───────────────────────────────
+  const defText = getVal('otherDeficiency');
+  if(defText) {
+    checkPage(20);
+    sectionHeader('Other Deficiencies / Suggestions');
+    doc.setFillColor(255,248,225);
+    const defLines = doc.splitTextToSize(defText, CW-6);
+    const defH = defLines.length*5+6;
+    checkPage(defH);
+    doc.rect(ML, y, CW, defH, 'F');
+    doc.setFontSize(8.5); doc.setFont(undefined,'normal'); doc.setTextColor(50,50,50);
+    doc.text(defLines, ML+3, y+5);
+    y += defH + 4;
+  }
+
+  y += 4;
+
+  // ─── DUAL SIGNATURE BLOCK ─────────────────────────────────────────
+  const sigNeeded = 35;
+  checkPage(sigNeeded);
+
+  let cli1 = getVal('cliName1');
+  if (cli1 === 'OTHERS') cli1 = getVal('cliOtherName') || 'OTHERS';
+  const date1 = getVal('inspDate');
+  const sig1File = document.getElementById('sig1Upload').files[0];
+  
+  
+
+  // Signature box width — right aligned
+  const sigBoxW = (CW - 8) / 2;
+
+  function drawSigBox(xStart, boxW, cli, sigDataUrl, dateVal) {
+    // Signature image (no border, no background, no label)
+    if(sigDataUrl) {
+      try { doc.addImage(sigDataUrl,'PNG', xStart+4, y, boxW-8, 16); } catch(e){}
+    }
+    
+    // Thin underline
+    doc.setDrawColor(80,80,80); doc.setLineWidth(0.4);
+    doc.line(xStart+4, y+18, xStart+boxW-4, y+18);
+    // CLI name
+    doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(20,20,80);
+    const cliLines = doc.splitTextToSize(cli||'', boxW-6);
+    doc.text(cliLines, xStart+boxW/2, y+23, {align:'center'});
+    // Date
+    doc.setFontSize(7.5); doc.setFont(undefined,'normal'); doc.setTextColor(60,60,100);
+    doc.text('Date: '+(dateVal||'—'), xStart+boxW/2, y+29, {align:'center'});
+  }
+
+  // Collect signature images then finalize — signature placed on RIGHT side
+  function finalize(s1Data) {
+    // xStart for right side = ML + sigBoxW + 8
+    drawSigBox(ML + sigBoxW + 8, sigBoxW, cli1, s1Data, date1);
+
+    // Footer
+    doc.setFillColor(26,35,126);
+    doc.rect(0, PH-10, PW, 10, 'F');
+    doc.setFontSize(7.5); doc.setFont(undefined,'normal'); doc.setTextColor(255,215,0);
+    doc.text('SFT-6 | Raipur Division, SECR | Generated: '+new Date().toLocaleDateString('en-IN'), PW/2, PH-4, {align:'center'});
+
+    doc.save('SFT6_Lobby_Inspection_'+new Date().toISOString().split('T')[0]+'.pdf');
+    showMessage('PDF generated and downloaded successfully!', 'success');
+  }
+
+  // Load signature if present
+  if(sig1File) {
+    const r1 = new FileReader();
+    r1.onload = e1 => finalize(e1.target.result);
+    r1.readAsDataURL(sig1File);
+  } else {
+    finalize(null);
+  }
+}
+
+// ── Set today's date on load ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('dateOfInsp').value = today;
+  document.getElementById('inspDate').value = today;
+});
+</script>
+</body>
+</html>
