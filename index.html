@@ -1020,37 +1020,47 @@ document.addEventListener('input', function(e) {
 
 // ── Submit → Google Sheets ────────────────────────────────────────────
 async function submitForm() {
-  // Gather the key fields to save
-  let cliName = getVal('cliName1');
-  if (cliName === 'OTHERS') cliName = getVal('cliOtherName') || 'OTHERS';
+  // Resolve CLI names (handle OTHERS)
+  let cli1 = getVal('cliName1');
+  if (cli1 === 'OTHERS') cli1 = getVal('cliOtherName') || 'OTHERS';
+  let cli2 = getVal('cliName2');
+  if (cli2 === 'OTHERS') cli2 = getVal('cli2OtherName') || 'OTHERS';
 
   const payload = {
-    cliNameHQ:        cliName,
-    dateOfInspection: getVal('dateOfInsp'),
-    lobbyName:        getVal('lobbyName'),
-    bookingSupervisor:getVal('cbsName'),
-    otherDeficiency:  getVal('otherDeficiency')
+    sheet:                'Lobby Inspection',
+    cliName1:             cli1,
+    cliName2:             cli2,
+    inspOfficerName:      getVal('inspOfficerName'),
+    inspOfficerDesig:     getVal('inspOfficerDesig'),
+    dateOfInspection:     formatDate(getVal('dateOfInsp')),
+    nameOfLobby:          getVal('lobbyName'),
+    bookingSupervisor:    getVal('cbsName'),
+    diBookingClerk:       getVal('diClerkName'),
+    deficiency:           getVal('otherDeficiency')
   };
 
   // Google Apps Script Web App URL
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGIotF2PhhhmX9vEvCDJDrFFFfSmX5O10a_T-sujkKDw3CcOT9tECAdNm6dbASOQWf_A/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7WDM2HP5ukVhVtQCS2fwdJ2BvKnv9xszb8gMMK273j90Njwb5_nmtfgikZSdGYReciw/exec';
 
   showMessage('⏳ Submitting to Google Sheets...', 'success');
 
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, {
+    // Send as URL-encoded form so Apps Script reads e.parameter reliably
+    const body = Object.entries(payload)
+      .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v||''))
+      .join('&');
+
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
     });
-    // no-cors means we can't read the response, but it fires
     formSubmitted = true;
-    showMessage('✅ Submitted! Data saved to Google Sheets. You may now generate PDF.', 'success');
+    showMessage('✅ Data saved to Google Sheets! You may now generate PDF.', 'success');
   } catch(err) {
-    // Still allow PDF generation even if sheet fails
     formSubmitted = true;
-    showMessage('⚠️ Sheet save failed (check Apps Script URL), but PDF can still be generated.', 'error');
+    showMessage('⚠️ Sheet save failed. Check network/URL. PDF can still be generated.', 'error');
   }
 }
 
