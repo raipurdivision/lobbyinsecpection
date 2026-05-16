@@ -9,6 +9,8 @@
 
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,8 +56,8 @@ input[type="text"],textarea{text-transform:uppercase;}
 .dual-ans{display:flex;flex-direction:column;gap:3px;}
 .dual-ans label{font-size:10px;font-weight:bold;color:#555;margin-bottom:0;}
 /* Signature section */
-.sig-row{display:flex;gap:14px;margin-top:10px;justify-content:flex-start;align-items:flex-start;}
-.sig-box{flex:1 1 100%;width:100%;max-width:100%;background:white;border:2px solid #b3d9ff;border-radius:8px;padding:16px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.sig-row{display:flex;gap:40px;margin-top:10px;justify-content:space-between;align-items:flex-start;width:100%;}
+.sig-box{flex:0 0 calc(50% - 20px);width:calc(50% - 20px);background:white;border:2px solid #b3d9ff;border-radius:8px;padding:16px 20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 #cliOtherName{display:none;margin-top:5px;width:100%;padding:7px 10px;border:2px solid #f0a500;border-radius:5px;font-size:14px;font-weight:bold;background:#fffbe6;text-transform:uppercase;}
 .sig-box h4{color:#1a237e;font-size:14px;font-weight:bold;text-transform:uppercase;margin-bottom:8px;border-bottom:2px solid #4a90e2;padding-bottom:6px;}
 .sig-box label{display:block;font-weight:bold;font-size:13px;color:#1a237e;margin-bottom:4px;text-align:left;}
@@ -70,6 +72,10 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
 .save-draft-btn:hover{background:linear-gradient(135deg,#8e44ad,#7d3c98);transform:translateY(-2px);}
 .upload-draft-btn{background:linear-gradient(135deg,#16a085,#138d75);color:white;}
 .upload-draft-btn:hover{background:linear-gradient(135deg,#138d75,#117a65);transform:translateY(-2px);}
+.clear-draft-btn{background:linear-gradient(135deg,#c0392b,#a93226);color:white;font-size:0.78em;padding:7px 14px;}
+.clear-draft-btn:hover{background:linear-gradient(135deg,#a93226,#922b21);transform:translateY(-2px);}
+#autosave-indicator{position:fixed;bottom:14px;right:18px;background:rgba(26,35,126,0.92);color:#FFD700;font-size:11px;font-weight:bold;padding:5px 13px;border-radius:20px;z-index:9999;display:none;letter-spacing:0.5px;box-shadow:0 2px 8px rgba(0,0,0,0.25);transition:opacity 0.4s;}
+#autosave-indicator.show{display:block;}
 .submit-btn{background:linear-gradient(135deg,#3498db,#2980b9);color:white;}
 .submit-btn:hover{background:linear-gradient(135deg,#2980b9,#21618c);transform:translateY(-2px);}
 .pdf-btn{background:linear-gradient(135deg,#e67e22,#d35400);color:white;}
@@ -133,7 +139,8 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
         </div>
         <div class="info-field">
           <label for="inspOfficerDate">Date of Inspection:</label>
-          <input type="date" id="inspOfficerDate">
+          <input type="date" id="inspOfficerDate" onchange="updateDateDisplay(this,'inspOfficerDateDisplay')">
+          <span id="inspOfficerDateDisplay" style="font-size:12px;font-weight:bold;color:#1a237e;display:block;margin-top:2px;"></span>
         </div>
       </div>
     </div>
@@ -144,7 +151,8 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
       <div class="info-fields">
         <div class="info-field">
           <label for="dateOfInsp">Date of Inspection:</label>
-          <input type="date" id="dateOfInsp">
+          <input type="date" id="dateOfInsp" onchange="updateDateDisplay(this,'dateOfInspDisplay')">
+          <span id="dateOfInspDisplay" style="font-size:12px;font-weight:bold;color:#1a237e;display:block;margin-top:2px;"></span>
         </div>
         <div class="info-field">
           <label for="lobbyName">Name of Lobby:</label>
@@ -344,8 +352,10 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
             <td class="q-cell">General upkeep of the lobby &amp; Housekeeping</td>
             <td class="ans-cell">
               <select id="lobbyUpkeep">
-             
-              
+                <option value="GOOD">Good</option>
+                <option value="SATISFACTORY">Satisfactory</option>
+                <option value="UNSATISFACTORY">Unsatisfactory</option>
+                <option value="NEEDS IMPROVEMENT">Needs Improvement</option>
               </select>
             </td>
             <td class="obs-cell"><textarea id="obs9" placeholder="Observations..."></textarea></td>
@@ -706,7 +716,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
             <option value="K P LAHARE/CLI/R">K P LAHARE/CLI/R</option>
             <option value="K P HIRWANI/CLI/BYT">K P HIRWANI/CLI/BYT</option>
             <option value="K. K. SAHU/CLI/BIA">K. K. SAHU/CLI/BIA</option>
-            <option value="KHUSHAL SINGH/CLI/DRZ">KHUSHAL SINGH/CLI/DRZ</option>
+            <option value="KHUSAL SINGH/CLI/DRZ">KHUSAL SINGH/CLI/DRZ</option>
             <option value="MAHESHWAR/CLI/BIA">MAHESHWAR/CLI/BIA</option>
             <option value="MANOJ KUMAR SAO/CLI/R">MANOJ KUMAR SAO/CLI/R</option>
             <option value="MANSUKH LAL CHANDRAKAR/CLI/R">MANSUKH LAL CHANDRAKAR/CLI/R</option>
@@ -740,7 +750,7 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
             <option value="SANAT KUMAR SAHU/CLI/DRZ">SANAT KUMAR SAHU/CLI/DRZ</option>
             <option value="V.K. BHAGAT/CLI/R">V.K. BHAGAT/CLI/R</option>
             <option value="VIJAY KUMAR ARYA/CLI/BIA">VIJAY KUMAR ARYA/CLI/BIA</option>
-            <option value="VIKAS SHENDE/CLI/R">VIKAS SHENDE/CLI/R</option>
+            <option value="VIKAS SHENDE/CLI/BIA">VIKAS SHENDE/CLI/BIA</option>
             <option value="VINAY KUMAR VINCHURE/CLI/BIA">VINAY KUMAR VINCHURE/CLI/BIA</option>
             <option value="VINAY PANTAWANE/CLI/BIA">VINAY PANTAWANE/CLI/BIA</option>
             <option value="Y. RAMU/CLI/BIA">Y. RAMU/CLI/BIA</option>
@@ -755,7 +765,93 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
             
           </div>
             <label for="inspDate">Date:</label>
-          <input type="date" id="inspDate">
+          <input type="date" id="inspDate" onchange="updateDateDisplay(this,'inspDateDisplay')">
+          <span id="inspDateDisplay" style="font-size:12px;font-weight:bold;color:#1a237e;display:block;margin-top:2px;"></span>
+        </div>
+
+        <!-- RIGHT SIGNATURE — CLI 2 -->
+        <div class="sig-box">
+          <label for="cliName2">CLI 2 Name and HQ:</label>
+          <select id="cliName2" onchange="handleCli2Other(this)" style="font-size:15px;padding:10px 12px;height:48px;font-weight:bold;color:#1a237e;border:2px solid #4a90e2;">
+            <option value="">Select CLI 2 Name and HQ</option>
+            <option value="A K REDDY/CLI/BIA">A K REDDY/CLI/BIA</option>
+            <option value="A.R.TARAM/CLI/BIA">A.R. TARAM/CLI/BIA</option>
+            <option value="ABDUL MOIN KHAN/CLI/BIA">ABDUL MOIN KHAN/CLI/BIA</option>
+            <option value="AKHILESH KUMAR/CLI/BIA">AKHILESH KUMAR/CLI/BIA</option>
+            <option value="AMIT KUMAR BANKURE/CLI/BYT">AMIT KUMAR BANKURE/CLI/BYT</option>
+            <option value="ANANT PRAKASH SHRIVASTAVA/CLI/BIA">ANANT PRAKASH SHRIVASTAVA/CLI/BIA</option>
+            <option value="ANIL KUMAR/CLI/BIA">ANIL KUMAR/CLI/BIA</option>
+            <option value="ANKIT RAM KANT/CLI/BIA">ANKIT RAM KANT/CLI/BIA</option>
+            <option value="AVON KUMAR SAHU/CLI/R">AVON KUMAR SAHU/CLI/R</option>
+            <option value="ASHISH WANJARI/CLI/BYT">ASHISH WANJARI/CLI/BYT</option>
+            <option value="B B KUSHWAHA/CLI/BIA">B B KUSHWAHA/CLI/BIA</option>
+            <option value="B K HARMUKH/CLI/BIA">B K HARMUKH/CLI/BIA</option>
+            <option value="B. K. SAHA/CLI/BIA">B. K. SAHA/CLI/BIA</option>
+            <option value="B.K.SONI/CLI/BIA">B.K.SONI/CLI/BIA</option>
+            <option value="BHARAT SINGH ATBHAIYYA/CLI/R">BHARAT SINGH ATBHAIYYA/CLI/R</option>
+            <option value="BHOLI CHAUDHARY/CLI/R">BHOLI CHAUDHARY/CLI/R</option>
+            <option value="BIKRAMJIT KANRAR/CLI/BIA">BIKRAMJIT KANRAR/CLI/BIA</option>
+            <option value="BINOD KUMAR RAM/CLI/R">BINOD KUMAR RAM/CLI/R</option>
+            <option value="DEEPANNITA PUNTAMBEKAR/CLI/BIA">DEEPANNITA PUNTAMBEKAR/CLI/BIA</option>
+            <option value="DILLI RAO/CLI/BYT">DILLI RAO/CLI/BYT</option>
+            <option value="G. C. BISWAS/CLI/R">G. C. BISWAS/CLI/R</option>
+            <option value="G. V. R. K. MADHU/CLI/BIA">G. V. R. K. MADHU/CLI/BIA</option>
+            <option value="GIRDHARI LAL/CLI/R">GIRDHARI LAL/CLI/R</option>
+            <option value="JAISHANKAR SHARMA/CLI/BIA">JAISHANKAR SHARMA/CLI/BIA</option>
+            <option value="JITENDRA KUMAR MISHRA/CLI/BYT">JITENDRA KUMAR MISHRA/CLI/BYT</option>
+            <option value="K P LAHARE/CLI/R">K P LAHARE/CLI/R</option>
+            <option value="K P HIRWANI/CLI/BYT">K P HIRWANI/CLI/BYT</option>
+            <option value="K. K. SAHU/CLI/BIA">K. K. SAHU/CLI/BIA</option>
+            <option value="KHUSAL SINGH/CLI/DRZ">KHUSAL SINGH/CLI/DRZ</option>
+            <option value="MAHESHWAR/CLI/BIA">MAHESHWAR/CLI/BIA</option>
+            <option value="MANOJ KUMAR SAO/CLI/R">MANOJ KUMAR SAO/CLI/R</option>
+            <option value="MANSUKH LAL CHANDRAKAR/CLI/R">MANSUKH LAL CHANDRAKAR/CLI/R</option>
+            <option value="MOHIT KUMAR SWARNKAR/CLI/BIA">MOHIT KUMAR SWARNKAR/CLI/BIA</option>
+            <option value="N. R. KARPAL/CLI/BIA">N. R. KARPAL/CLI/BIA</option>
+            <option value="N.K. BHOI/CLI/R">N.K. BHOI/CLI/R</option>
+            <option value="NITIN KUKDE/CLI/BYT">NITIN KUKDE/CLI/BYT</option>
+            <option value="NIRMAL KUMAR/CLI/BYT">NIRMAL KUMAR/CLI/BYT</option>
+            <option value="P.K. PATEL/CLI/BIA">P.K. PATEL/CLI/BIA</option>
+            <option value="PANKAJ KUMAR SINGH/CLI/BIA">PANKAJ KUMAR SINGH/CLI/BIA</option>
+            <option value="PAWAN KUMAR SINGH/CLI/BIA">PAWAN KUMAR SINGH/CLI/BIA</option>
+            <option value="PURAN LAL PATEL/CLI/BYT">PURAN LAL PATEL/CLI/BYT</option>
+            <option value="RAJENDRA KUMAR/CLI/BIA">RAJENDRA KUMAR/CLI/BIA</option>
+            <option value="PALAK RAM ALENDRA/CLI/DRZ">PALAK RAM ALENDRA/CLI/DRZ</option>
+            <option value="RAJESH KUMAR DESHMUKH/CLI/R">RAJESH KUMAR DESHMUKH/CLI/R</option>
+            <option value="RAJNEESH BENERJEE/CLI/BIA">RAJNEESH BENERJEE/CLI/BIA</option>
+            <option value="RANJEET SINGH/CLI/BYT">RANJEET SINGH/CLI/BYT</option>
+            <option value="RAKESH KUMAR KOSTA/CLI/DRZ">RAKESH KUMAR KOSTA/CLI/DRZ</option>
+            <option value="S K GAUTAM/CLI/BIA">S K GAUTAM/CLI/BIA</option>
+            <option value="S S HUSSAIN/CLI/BIA">S S HUSSAIN/CLI/BIA</option>
+            <option value="S. C. RAI/CLI/BIA">S. C. RAI/CLI/BIA</option>
+            <option value="S. K. SINGH/CLI/BIA">S. K. SINGH/CLI/BIA</option>
+            <option value="S. L. SONI/CLI/R">S. L. SONI/CLI/R</option>
+            <option value="SANJAY KUMAR ROY/CLI/BIA">SANJAY KUMAR ROY/CLI/BIA</option>
+            <option value="SANJAY SINGH/CLI/BYT">SANJAY SINGH/CLI/BYT</option>
+            <option value="SANJEEV KUMAR SHARMA/CLI/BIA">SANJEEV KUMAR SHARMA/CLI/BIA</option>
+            <option value="SANTOSH KUMAR PATKAR/CLI/BIA">SANTOSH KUMAR PATKAR/CLI/BIA</option>
+            <option value="SHAILENDRA SINGH/CLI/BIA">SHAILENDRA SINGH/CLI/BIA</option>
+            <option value="SUNDEEP KUMAR SHARMA/CLI/BIA">SUNDEEP KUMAR SHARMA/CLI/BIA</option>
+            <option value="SUNIL KUMAR DEWANGAN/CLI/BIA">SUNIL KUMAR DEWANGAN/CLI/BIA</option>
+            <option value="SANAT KUMAR SAHU/CLI/DRZ">SANAT KUMAR SAHU/CLI/DRZ</option>
+            <option value="V.K. BHAGAT/CLI/R">V.K. BHAGAT/CLI/R</option>
+            <option value="VIJAY KUMAR ARYA/CLI/BIA">VIJAY KUMAR ARYA/CLI/BIA</option>
+            <option value="VIKAS SHENDE/CLI/BIA">VIKAS SHENDE/CLI/BIA</option>
+            <option value="VINAY KUMAR VINCHURE/CLI/BIA">VINAY KUMAR VINCHURE/CLI/BIA</option>
+            <option value="VINAY PANTAWANE/CLI/BIA">VINAY PANTAWANE/CLI/BIA</option>
+            <option value="Y. RAMU/CLI/BIA">Y. RAMU/CLI/BIA</option>
+            <option value="YOGESH KUMAR MIHAULIA/CLI/BIA">YOGESH KUMAR MIHAULIA/CLI/BIA</option>
+            <option value="OTHERS">OTHERS</option>
+          </select>
+          <input type="text" id="cli2OtherName" placeholder="Enter CLI 2 Name and HQ manually..." style="display:none;margin-top:5px;width:100%;padding:7px 10px;border:2px solid #f0a500;border-radius:5px;font-size:14px;font-weight:bold;background:#fffbe6;text-transform:uppercase;">
+          <label for="sig2Upload" style="margin-top:8px;">Upload Signature:</label>
+          <input type="file" id="sig2Upload" accept="image/*" onchange="previewSig(event,'sig2Preview','sig2Img')">
+          <div id="sig2Preview" class="sig-preview">
+            <img id="sig2Img" alt="Signature 2">
+          </div>
+          <label for="inspDate2">Date:</label>
+          <input type="date" id="inspDate2" onchange="updateDateDisplay(this,'inspDate2Display')">
+          <span id="inspDate2Display" style="font-size:12px;font-weight:bold;color:#1a237e;display:block;margin-top:2px;"></span>
         </div>
 
       </div>
@@ -766,15 +862,87 @@ button{padding:11px 26px;font-size:0.95em;font-weight:bold;border:none;border-ra
     <div class="button-group">
       <button class="save-draft-btn" onclick="saveDraft()">💾 Save Draft</button>
       <button class="upload-draft-btn" onclick="document.getElementById('draftFileInput').click()">📂 Upload Draft</button>
+      <button class="clear-draft-btn" onclick="clearDraft()">🗑️ Clear Draft</button>
       <button class="submit-btn" onclick="submitForm()">✅ Submit</button>
       <button class="pdf-btn" onclick="generatePDF()">📄 Generate PDF</button>
     </div>
+    <div id="autosave-indicator">✅ Auto-saved</div>
     <div id="messageOverlay" class="message-overlay"></div>
     <div id="message" class="message"></div>
   </div>
 </div>
 
 <script>
+// ── Date Format Helper (YYYY-MM-DD → DD/MM/YYYY) ─────────────────────
+function formatDate(val) {
+  if (!val) return '—';
+  const parts = val.split('-');
+  if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+  return val;
+}
+function updateDateDisplay(input, spanId) {
+  const span = document.getElementById(spanId);
+  if (span) span.textContent = input.value ? formatDate(input.value) : '';
+}
+
+// ── Auto-save to localStorage ─────────────────────────────────────────
+const AUTO_SAVE_KEY = 'sft6_autosave_draft';
+const ALL_FORM_IDS = ['dateOfInsp','lobbyName','cbsName','diClerkName','lobbyWorking',
+  'signOnCrew','signOnGuard','obs1','regCrewMaintained','regGuardMaintained','obs2',
+  'cmsKioskWorking','kioskBiometric','cctvItem3','obs3','cmsLinkFailures','obs4',
+  'safetyPosters','obs5','signalList','obs6','spadBoard','obs7','baAvailable','obs8',
+  'lobbyUpkeep','obs9','properUniform','obs10','safetyCircularCrew','safetyCircularGuard','obs11',
+  'unusualOccReg','obs12','lrDueReg','obs13','speedGun','obs14','crewRHQReg','obs15',
+  'cctvGeneral','obsG1','firstAidBox','firstAidRefillDate','obsG2','fireExtinguisher','obsG3',
+  'waterCoolerDate','obsG4','generalCleanliness','obsG5',
+  'alcoholList','obsC1','seniorGoodsLP','obsC2','pmeRefresher','obsC3',
+  'avgPDD','obsC4','avgPR','obsC5','fetchPercent','obsC6','manualSignOn','manualSignOff','obsC7',
+  'longHoursPercent','obsC8','abnormalityPercent','obsC9','mobileDeclarationLP','obsC10',
+  'utilizationLP','obsC11','lpRatio','obsC12','cvvrsCLI','obsC13',
+  'grievanceReg','obsS1','pendingGrievance','obsS2','welfareAware','obsS3','payGrievance','obsS4',
+  'promotionMACP','obsS5','hrmsPass','obsS6','hrmsLeave','obsS7','uniformAllowance','obsS8',
+  'otherDeficiency','placeField','inspDate','inspDate2','inspOfficerName','inspOfficerDesig','inspOfficerDate',
+  'cliName1','cliOtherName','cliName2','cli2OtherName'];
+
+let _autoSaveTimer = null;
+function triggerAutoSave() {
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(() => {
+    const d = {};
+    ALL_FORM_IDS.forEach(id => { const el = document.getElementById(id); if(el) d[id] = el.value; });
+    try { localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(d)); } catch(e){}
+    const ind = document.getElementById('autosave-indicator');
+    if(ind){ ind.classList.add('show'); setTimeout(()=>ind.classList.remove('show'),2000); }
+  }, 800);
+}
+
+function restoreAutoSave() {
+  try {
+    const raw = localStorage.getItem(AUTO_SAVE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    ALL_FORM_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && d[id] !== undefined && d[id] !== '') el.value = d[id];
+    });
+    // Re-trigger OTHERS visibility
+    const c1 = document.getElementById('cliName1');
+    if(c1 && c1.value==='OTHERS') { const o=document.getElementById('cliOtherName'); if(o) o.style.display='block'; }
+    const c2 = document.getElementById('cliName2');
+    if(c2 && c2.value==='OTHERS') { const o=document.getElementById('cli2OtherName'); if(o) o.style.display='block'; }
+  } catch(e){}
+}
+
+function clearDraft() {
+  if(!confirm('Are you sure you want to delete the saved draft? This cannot be undone.')) return;
+  try { localStorage.removeItem(AUTO_SAVE_KEY); } catch(e){}
+  showMessage('🗑️ Draft cleared successfully.', 'success');
+}
+
+// Attach auto-save listeners to all inputs/selects/textareas
+document.addEventListener('input', triggerAutoSave);
+document.addEventListener('change', triggerAutoSave);
+
 // ── Signature Preview ────────────────────────────────────────────────
 function previewSig(event, previewId, imgId) {
   const file = event.target.files[0];
@@ -823,7 +991,19 @@ function handleCliOther(sel) {
   resetPDF();
 }
 
-// ── Reset PDF state when form changes ────────────────────────────────
+// ── Handle CLI 2 "OTHERS" selection ──────────────────────────────────
+function handleCli2Other(sel) {
+  const otherBox = document.getElementById('cli2OtherName');
+  if (sel.value === 'OTHERS') {
+    otherBox.style.display = 'block';
+    otherBox.focus();
+  } else {
+    otherBox.style.display = 'none';
+    otherBox.value = '';
+  }
+}
+
+
 function resetPDF() {
   pdfGenerated = false;
   formSubmitted = false;
@@ -935,7 +1115,7 @@ function generatePDF() {
   const doc = new jsPDF('p','mm','a4');
   const PW = doc.internal.pageSize.getWidth(); // 210
   const PH = doc.internal.pageSize.getHeight(); // 297
-  const ML = 10, MR = PW - 10;
+  const ML = 6, MR = PW - 6;
   const CW = MR - ML;
   let y = 0;
 
@@ -959,7 +1139,7 @@ function generatePDF() {
 
   // ─── Helper functions ───────────────────────────────────────────────
   function checkPage(needed) {
-    if (y + needed > PH - 25) { doc.addPage(); addPageHeader(); y = 38; }
+    if (y + needed > PH - 15) { doc.addPage(); addPageHeader(); y = 38; }
   }
 
   function addPageHeader() {
@@ -1095,7 +1275,7 @@ function generatePDF() {
   doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(60,60,100);
   doc.text('Date of Inspection:', ML+2, y);
   doc.setFont(undefined,'normal'); doc.setTextColor(0,0,0);
-  doc.text(String(getVal('inspOfficerDate')||'—'), ML+2+lblW, y);
+  doc.text(String(formatDate(getVal('inspOfficerDate'))||'—'), ML+2+lblW, y);
   y += 5;
 
   // ─── Section 1: A. Lobby Particulars ────────────────────────────
@@ -1105,7 +1285,7 @@ function generatePDF() {
   doc.setDrawColor(150,190,230); doc.setLineWidth(0.3);
   doc.rect(ML, y, CW, 22, 'S');
   y += 5;
-  fieldRow2('Date of Inspection', getVal('dateOfInsp'), 'Name of Lobby', getVal('lobbyName'));
+  fieldRow2('Date of Inspection', formatDate(getVal('dateOfInsp')), 'Name of Lobby', getVal('lobbyName'));
   fieldRow2('Crew Booking Supervisor', getVal('cbsName'), 'DI / Booking Clerk', getVal('diClerkName'));
   y += 3;
 
@@ -1128,7 +1308,8 @@ function generatePDF() {
   ];
   tableSection('B. Lobby Working', lobbyRows);
 
-  // ─── Section 3: General Checks ───────────────────────────────────
+  // ─── Section 3: General Checks ─── ALWAYS START ON NEW PAGE ─────────
+  doc.addPage(); addPageHeader(); y = 38;
   const generalRows = [
     {sn:'1', question:'Availability and working of CCTV camera', answer:getVal('cctvGeneral'), obs:getVal('obsG1')},
     {sn:'2', question:'First Aid Box available? Refill date: '+getVal('firstAidRefillDate'), answer:getVal('firstAidBox'), obs:getVal('obsG2')},
@@ -1174,41 +1355,52 @@ function generatePDF() {
   y += 3;
 
   // ─── DUAL SIGNATURE BLOCK ─────────────────────────────────────────
-  const sigNeeded = 35;
+  const sigNeeded = 22;
   checkPage(sigNeeded);
 
+  // CLI 1 (left)
   let cli1 = getVal('cliName1');
   if (cli1 === 'OTHERS') cli1 = getVal('cliOtherName') || 'OTHERS';
-  const date1 = getVal('inspDate');
+  const date1 = formatDate(getVal('inspDate'));
   const sig1File = document.getElementById('sig1Upload').files[0];
-  
-  
 
-  // Signature box width — right aligned
-  const sigBoxW = (CW - 8) / 2;
+  // CLI 2 (right)
+  let cli2 = getVal('cliName2');
+  if (cli2 === 'OTHERS') cli2 = getVal('cli2OtherName') || 'OTHERS';
+  const date2 = formatDate(getVal('inspDate2'));
+  const sig2File = document.getElementById('sig2Upload').files[0];
 
-  function drawSigBox(xStart, boxW, cli, sigDataUrl, dateVal) {
-    // Signature image (no border, no background, no label)
-    if(sigDataUrl) {
-      try { doc.addImage(sigDataUrl,'PNG', xStart+4, y, boxW-8, 16); } catch(e){}
+  // Each sig box = quarter of content width (half the old half = quarter total)
+  const sigBoxW = (CW - 10) / 4;
+
+  function drawSigBox(xStart, boxW, label, cli, sigDataUrl, dateVal) {
+    // Border box
+    doc.setDrawColor(74,144,226); doc.setLineWidth(0.4);
+    doc.rect(xStart, y, boxW, 18, 'S');
+    // Label above box
+    doc.setFontSize(7); doc.setFont(undefined,'bold'); doc.setTextColor(26,35,126);
+    doc.text(label, xStart + boxW/2, y - 1, {align:'center'});
+    // Signature image
+    if (sigDataUrl) {
+      try { doc.addImage(sigDataUrl, 'PNG', xStart+2, y+1, boxW-4, 8); } catch(e){}
     }
-    
     // Thin underline
-    doc.setDrawColor(80,80,80); doc.setLineWidth(0.4);
-    doc.line(xStart+4, y+18, xStart+boxW-4, y+18);
+    doc.setDrawColor(80,80,80); doc.setLineWidth(0.3);
+    doc.line(xStart+2, y+10, xStart+boxW-2, y+10);
     // CLI name
-    doc.setFontSize(8.5); doc.setFont(undefined,'bold'); doc.setTextColor(20,20,80);
-    const cliLines = doc.splitTextToSize(cli||'', boxW-6);
-    doc.text(cliLines, xStart+boxW/2, y+23, {align:'center'});
+    doc.setFontSize(7); doc.setFont(undefined,'bold'); doc.setTextColor(20,20,80);
+    const cliLines = doc.splitTextToSize(cli||'—', boxW-4);
+    doc.text(cliLines, xStart+boxW/2, y+13, {align:'center'});
     // Date
-    doc.setFontSize(7.5); doc.setFont(undefined,'normal'); doc.setTextColor(60,60,100);
-    doc.text('Date: '+(dateVal||'—'), xStart+boxW/2, y+29, {align:'center'});
+    doc.setFontSize(6.5); doc.setFont(undefined,'normal'); doc.setTextColor(60,60,100);
+    doc.text('Date: '+(dateVal||'—'), xStart+boxW/2, y+17, {align:'center'});
   }
 
-  // Collect signature images then finalize — signature placed on RIGHT side
-  function finalize(s1Data) {
-    // xStart for right side = ML + sigBoxW + 8
-    drawSigBox(ML + sigBoxW + 8, sigBoxW, cli1, s1Data, date1);
+  // Collect both signatures then draw
+  function finalize(s1Data, s2Data) {
+    // CLI 1 — far LEFT, CLI 2 — far RIGHT
+    drawSigBox(ML,                       sigBoxW, 'CLI 1', cli1, s1Data, date1);
+    drawSigBox(ML + CW - sigBoxW,        sigBoxW, 'CLI 2', cli2, s2Data, date2);
 
     // Footer
     doc.setFillColor(26,35,126);
@@ -1220,14 +1412,33 @@ function generatePDF() {
     showMessage('PDF generated and downloaded successfully!', 'success');
   }
 
-  // Load signature if present
-  if(sig1File) {
-    const r1 = new FileReader();
-    r1.onload = e1 => finalize(e1.target.result);
-    r1.readAsDataURL(sig1File);
-  } else {
-    finalize(null);
+  // Read both signature files, then call finalize
+  function loadSigs() {
+    let s1 = null, s2 = null;
+    const done = () => finalize(s1, s2);
+
+    if (sig1File && sig2File) {
+      const r1 = new FileReader();
+      r1.onload = e => { s1 = e.target.result;
+        const r2 = new FileReader();
+        r2.onload = e2 => { s2 = e2.target.result; done(); };
+        r2.readAsDataURL(sig2File);
+      };
+      r1.readAsDataURL(sig1File);
+    } else if (sig1File) {
+      const r1 = new FileReader();
+      r1.onload = e => { s1 = e.target.result; done(); };
+      r1.readAsDataURL(sig1File);
+    } else if (sig2File) {
+      const r2 = new FileReader();
+      r2.onload = e => { s2 = e.target.result; done(); };
+      r2.readAsDataURL(sig2File);
+    } else {
+      done();
+    }
   }
+
+  loadSigs();
 }
 
 // ── Set today's date on load ──────────────────────────────────────────
@@ -1236,6 +1447,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('dateOfInsp').value = today;
   document.getElementById('inspDate').value = today;
   document.getElementById('inspOfficerDate').value = today;
+  document.getElementById('inspDate2').value = today;
+  // Show formatted dates
+  ['dateOfInsp','inspDate','inspOfficerDate','inspDate2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) updateDateDisplay(el, id + 'Display');
+  });
+  // Restore auto-saved draft (overrides defaults if data exists)
+  restoreAutoSave();
+  // Re-render date displays after restore
+  ['dateOfInsp','inspDate','inspOfficerDate','inspDate2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) updateDateDisplay(el, id + 'Display');
+  });
 });
 </script>
 </body>
